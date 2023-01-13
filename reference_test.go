@@ -26,6 +26,7 @@
 package jsonreference
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/go-openapi/jsonpointer"
@@ -419,5 +420,19 @@ func TestReferenceResolution(t *testing.T) {
 		if res.String() != expected {
 			t.Errorf("%d: Inherits(%s, %s) %s expected %s", i/2, base, child, res.String(), expected)
 		}
+	}
+}
+
+func TestIdenticalURLEncoded(t *testing.T) {
+	expected, err := New("#/🍔")
+	if err != nil {
+		t.Fatalf("Failed to create jsonreference: %v", err)
+	}
+	actual, err := New("#/%F0%9F%8D%94")
+	if err != nil {
+		t.Fatalf("Failed to create jsonreference: %v", err)
+	}
+	if !reflect.DeepEqual(expected, actual) {
+		t.Fatalf("expected %#v (URL: %#v), got %#v (URL: %#v)", expected, expected.referenceURL, actual, actual.referenceURL)
 	}
 }

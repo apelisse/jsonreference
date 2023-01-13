@@ -113,6 +113,10 @@ func (r *Ref) parse(jsonReferenceString string) error {
 	if err != nil {
 		return err
 	}
+	parsed, err = url.Parse(parsed.String())
+	if err != nil {
+		return err
+	}
 
 	internal.NormalizeURL(parsed)
 
